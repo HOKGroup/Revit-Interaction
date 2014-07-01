@@ -45,6 +45,34 @@ namespace HOK.RevitInteraction
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            bool runCommand = false;
+            string analysisType = "";
+            string filePath = "";
+            string revitDocName = "";
+            string message = "";
+
+            if (!DA.GetData(0, ref runCommand)) { return; }
+            if (!DA.GetData(1, ref analysisType)) { return; }
+            if (!DA.GetData(2, ref filePath)) { return; }
+
+            if (runCommand)
+            {
+                RegistryKeyManager.SetRegistryKeyValue("RhinoOutgoing", runCommand.ToString());
+                RegistryKeyManager.SetRegistryKeyValue("RhinoOutgoingPath", filePath);
+                RegistryKeyManager.SetRegistryKeyValue("RhinoOutgoingId", Guid.NewGuid().ToString());
+
+                message = "Rhino is sending result data to Revit";
+
+                revitDocName = RegistryKeyManager.GetRegistryKeyValue("RevitDocName");
+                if (!string.IsNullOrEmpty(revitDocName))
+                {
+                    DA.SetData(0, revitDocName);
+                    DA.SetData(1, message);
+                }
+            }
+
+            
+
         }
 
         /// <summary>

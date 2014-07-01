@@ -3,16 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HOK.RevitInteraction", "HOK.RevitInteraction\HOK.RevitInteraction.csproj", "{3FC3CD5C-3EA6-4D90-A38F-2CD05D7A0E3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HOK.RhinoReciver", "HOK.RhinoReciver\HOK.RhinoReciver.csproj", "{1B9CB8A8-535E-4EED-8155-ED5C111BA834}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug64|Any CPU = Debug64|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3FC3CD5C-3EA6-4D90-A38F-2CD05D7A0E3D}.Debug|Any CPU.ActiveCfg = Debug64|Any CPU
+		{3FC3CD5C-3EA6-4D90-A38F-2CD05D7A0E3D}.Debug|Any CPU.Build.0 = Debug64|Any CPU
 		{3FC3CD5C-3EA6-4D90-A38F-2CD05D7A0E3D}.Debug64|Any CPU.ActiveCfg = Debug64|Any CPU
 		{3FC3CD5C-3EA6-4D90-A38F-2CD05D7A0E3D}.Debug64|Any CPU.Build.0 = Debug64|Any CPU
 		{3FC3CD5C-3EA6-4D90-A38F-2CD05D7A0E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FC3CD5C-3EA6-4D90-A38F-2CD05D7A0E3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B9CB8A8-535E-4EED-8155-ED5C111BA834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B9CB8A8-535E-4EED-8155-ED5C111BA834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B9CB8A8-535E-4EED-8155-ED5C111BA834}.Debug64|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B9CB8A8-535E-4EED-8155-ED5C111BA834}.Debug64|Any CPU.Build.0 = Debug|Any CPU
+		{1B9CB8A8-535E-4EED-8155-ED5C111BA834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B9CB8A8-535E-4EED-8155-ED5C111BA834}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
