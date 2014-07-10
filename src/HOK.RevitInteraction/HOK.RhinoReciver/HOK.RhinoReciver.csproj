@@ -60,6 +60,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RegistryKeyManager.cs" />
+    <Compile Include="RhinoFileCreator.cs" />
+    <Compile Include="SendCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

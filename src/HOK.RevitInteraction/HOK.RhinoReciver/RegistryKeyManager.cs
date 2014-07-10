@@ -127,6 +127,7 @@ namespace HOK.RhinoReciver
         private string rhinoDocName = "";
 
         private bool revitOutgoing = false;
+        private int revitOutgoingViewId = -1;
         private string revitOutgoingPath = "";
         private Guid revitOutgoingId = new Guid();
 
@@ -149,10 +150,12 @@ namespace HOK.RhinoReciver
         public string RhinoDocNameKey = "RhinoDocName";
 
         public bool RevitOutgoing { get { return revitOutgoing; } set { revitOutgoing = value; } }
+        public int RevitOutgoingViewId { get { return revitOutgoingViewId; } set { revitOutgoingViewId = value; } }
         public string RevitOutgoingPath { get { return revitOutgoingPath; } set { revitOutgoingPath = value; } }
         public Guid RevitOutgoingId { get { return revitOutgoingId; } set { revitOutgoingId = value; } }
         
         public string RevitOutgoingKey="RevitOutgoing";
+        public string RevitOutgoingViewIdKey = "RevitOutgoingViewId";
         public string RevitOutgoingPathKey = "RevitOutgoingPath";
         public string RevitOutgoingIdKey = "RevitOutgoingId";
 

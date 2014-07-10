@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
@@ -14,16 +16,24 @@ namespace HOK.RhinoReciver
     public class AppCommand:IExternalApplication
     {
         internal static AppCommand appCommand = null;
+        private dynamic rhino = null;
+        private bool rhinoInitialized=false;
         public PushButton toggleButton = null;
 
         private UIControlledApplication uicapp = null;
         private bool receiverActivated = false;
         private BitmapSource enableImage = null;
         private BitmapSource disableImage = null;
+        private BitmapSource sendImage = null;
 
         public static AppCommand Instance
         {
             get { return appCommand; }
+        }
+
+        public dynamic RhinoInstance
+        {
+            get { return rhino; }
         }
 
         public bool ReceiverActivated
@@ -33,6 +43,7 @@ namespace HOK.RhinoReciver
 
         public Result OnShutdown(UIControlledApplication application)
         {
+            DisposeRhino();
             return Result.Succeeded;
         }
 
@@ -40,18 +51,65 @@ namespace HOK.RhinoReciver
         {
             appCommand = this;
             uicapp = application;
+            rhinoInitialized = InitializeRhino();
 
             enableImage = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(Properties.Resources.enable.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            disableImage = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(Properties.Resources.disable.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions()); 
+            disableImage = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(Properties.Resources.disable.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            sendImage = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(Properties.Resources.send.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions()); 
 
             RibbonPanel rp = application.CreateRibbonPanel(" Rhino ");
             string currentAssembly=System.Reflection.Assembly.GetAssembly(this.GetType()).Location;
 
-            PushButton sendButton = rp.AddItem(new PushButtonData("Activate Receiver", "Activate Receiver", currentAssembly, "HOK.RhinoReciver.Command")) as PushButton;
-            sendButton.LargeImage = enableImage;
-            toggleButton = sendButton;
+            toggleButton = rp.AddItem(new PushButtonData("Activate Receiver", "Activate Receiver", currentAssembly, "HOK.RhinoReciver.Command")) as PushButton;
+            toggleButton.LargeImage = enableImage;
+
+            PushButton sendButton = rp.AddItem(new PushButtonData("Send", "Send", currentAssembly, "HOK.RhinoReciver.SendCommand")) as PushButton;
+            sendButton.LargeImage = sendImage;
 
             return Result.Succeeded;
+        }
+
+        public bool InitializeRhino()
+        {
+            bool initialized = false;
+            try
+            {
+                string rhinoId = "Rhino5x64.Application";
+                System.Type type = System.Type.GetTypeFromProgID(rhinoId);
+                rhino = System.Activator.CreateInstance(type);
+                if (null != rhino)
+                {
+                    rhino.Visible = 0;//non-visible 
+
+                    const int bail_milliseconds = 15 * 1000;
+                    int time_waiting = 0;
+                    while (0 == rhino.IsInitialized())
+                    {
+                        Thread.Sleep(100);
+                        time_waiting += 100;
+                        if (time_waiting > bail_milliseconds)
+                        {
+                            MessageBox.Show("Rhino initialization failed");
+                            return false;
+                        }
+                    }
+                    initialized = true;
+                }
+            }
+            catch
+            {
+                initialized = false;
+            }
+            return initialized;
+        }
+
+        private void DisposeRhino()
+        {
+            if (rhinoInitialized && null != rhino)
+            {
+                Marshal.FinalReleaseComObject(rhino);
+                rhino = null;
+            }
         }
 
         public void Toggle()
