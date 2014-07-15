@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -145,8 +146,8 @@ namespace HOK.RhinoReciver
            
             if (receiverActivated)
             {
-                //UIApplication uiapp = sender as UIApplication;
-                //Document doc = uiapp.ActiveUIDocument.Document;
+                UIApplication uiapp = sender as UIApplication;
+                Document doc = uiapp.ActiveUIDocument.Document;
 
                 e.SetRaiseWithoutDelay();
 
@@ -165,6 +166,26 @@ namespace HOK.RhinoReciver
                         if (result == TaskDialogResult.CommandLink1)
                         {
                             //AVF
+                            string tempDirectory = RegistryKeyManager.GetRegistryKeyValue("DivaTempDirectory");
+                            string[] gridFiles = Directory.GetFiles(tempDirectory, "*-AnalysisGrid.obj");
+                            if (gridFiles.Length > 0)
+                            {
+                                List<ObjMesh> objMeshes = new List<ObjMesh>();
+                                bool objImported = ObjImporter.ReadObjFile(gridFiles[0], out objMeshes);
+
+                                string dataPath = RegistryKeyManager.GetRegistryKeyValue("RhinoOutgoingPath");
+                                AnalysisDataManager avf = new AnalysisDataManager(uiapp, objMeshes, dataPath);
+                                if (avf.ReadResults())
+                                {
+                                    if (avf.CreateGeometry())
+                                    {
+                                        if (avf.VisualizeData())
+                                        {
+                                            MessageBox.Show("Result data from Rhino was successfully visualized.");
+                                        }
+                                    }
+                                }
+                            }
                         }
                         RegistryKeyManager.SetRegistryKeyValue("RhinoOutgoing", "False");
                     }

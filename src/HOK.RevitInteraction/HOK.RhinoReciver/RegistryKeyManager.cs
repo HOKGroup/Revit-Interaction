@@ -14,7 +14,6 @@ namespace HOK.RhinoReciver
     {
         private static string keyAddress = "Software\\Autodesk\\Revit\\Autodesk Revit 2015\\RevitInteraction";
 
-
         public static InteractionProperties GetRegistryKeyValues()
         {
             InteractionProperties ip = new InteractionProperties();
@@ -137,6 +136,8 @@ namespace HOK.RhinoReciver
 
         private bool rhinoOutgoing = false;
         private string rhinoOutgoingPath = "";
+        private string divaTempDirectory = "";
+        private string divaResultDirectory = "";
         private Guid rhinoOutgoingId = new Guid();
 
         private bool rhinoIncoming = false;
@@ -145,7 +146,7 @@ namespace HOK.RhinoReciver
 
         public string RevitDocName { get { return revitDocName; } set { revitDocName = value; } }
         public string RhinoDocName { get { return rhinoDocName; } set { rhinoDocName = value; } }
-        
+
         public string RevitDocNameKey = "RevitDocName";
         public string RhinoDocNameKey = "RhinoDocName";
 
@@ -153,8 +154,8 @@ namespace HOK.RhinoReciver
         public int RevitOutgoingViewId { get { return revitOutgoingViewId; } set { revitOutgoingViewId = value; } }
         public string RevitOutgoingPath { get { return revitOutgoingPath; } set { revitOutgoingPath = value; } }
         public Guid RevitOutgoingId { get { return revitOutgoingId; } set { revitOutgoingId = value; } }
-        
-        public string RevitOutgoingKey="RevitOutgoing";
+
+        public string RevitOutgoingKey = "RevitOutgoing";
         public string RevitOutgoingViewIdKey = "RevitOutgoingViewId";
         public string RevitOutgoingPathKey = "RevitOutgoingPath";
         public string RevitOutgoingIdKey = "RevitOutgoingId";
@@ -169,10 +170,14 @@ namespace HOK.RhinoReciver
 
         public bool RhinoOutgoing { get { return rhinoOutgoing; } set { rhinoOutgoing = value; } }
         public string RhinoOutgoingPath { get { return rhinoOutgoingPath; } set { rhinoOutgoingPath = value; } }
+        public string DivaTempDirectory { get { return divaTempDirectory; } set { divaTempDirectory = value; } }
+        public string DivaResultDirectory { get { return divaResultDirectory; } set { divaResultDirectory = value; } }
         public Guid RhinoOutgoingId { get { return rhinoOutgoingId; } set { rhinoOutgoingId = value; } }
 
         public string RhinoOutgoingKey = "RhinoOutgoing";
         public string RhinoOutgoingPathKey = "RhinoOutgoingPath";
+        public string DivaTempKey = "DivaTempDirectory";
+        public string DivaResultKey = "DivaResultDirectory";
         public string RhinoOutgoinIdKey = "RhinoOutgoingId";
 
         public bool RhinoIncoming { get { return rhinoIncoming; } set { rhinoIncoming = value; } }

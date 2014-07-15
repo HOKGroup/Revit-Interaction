@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.IO;
 using Grasshopper.Kernel;
+using Rhino;
 using Rhino.Geometry;
 
 namespace HOK.RevitInteraction
@@ -57,8 +58,22 @@ namespace HOK.RevitInteraction
 
             if (runCommand)
             {
+                List<Mesh> analysisGrid = FindAnalysisGrid();
+                string docName = RhinoDoc.ActiveDoc.Name;
+                string dirName = docName.Replace(".3dm", "");
+
+                string divaTemp=@"C:\DIVA\Temp";
+                string tempDirectory = Path.Combine(divaTemp, dirName);
+                string resultDirectory = Path.Combine(Path.GetDirectoryName(RhinoDoc.ActiveDoc.Path), dirName + " - DIVA");
+
+                string objFileName = Path.Combine(tempDirectory, dirName + "-AnalysisGrid.obj");
+                string script = string.Format("-Export \"{0}\" Enter Enter Enter", objFileName);
+                RhinoApp.RunScript(script, false);
+
                 RegistryKeyManager.SetRegistryKeyValue("RhinoOutgoing", runCommand.ToString());
                 RegistryKeyManager.SetRegistryKeyValue("RhinoOutgoingPath", filePath);
+                RegistryKeyManager.SetRegistryKeyValue("DivaTempDirectory", tempDirectory);
+                RegistryKeyManager.SetRegistryKeyValue("DivaResultDirectory", resultDirectory);
                 RegistryKeyManager.SetRegistryKeyValue("RhinoOutgoingId", Guid.NewGuid().ToString());
 
                 message = "Rhino is sending result data to Revit";
@@ -70,9 +85,6 @@ namespace HOK.RevitInteraction
                     DA.SetData(1, message);
                 }
             }
-
-            
-
         }
 
         /// <summary>
@@ -94,6 +106,52 @@ namespace HOK.RevitInteraction
         public override Guid ComponentGuid
         {
             get { return new Guid("{27cda3da-4f66-4733-b5bc-1b98d95ba895}"); }
+        }
+
+        private List<Mesh> FindAnalysisGrid()
+        {
+            List<Mesh> anlysisGrid = new List<Mesh>();
+            try
+            {
+                string layerName = "Analysis Grid";
+                Rhino.RhinoDoc activeDoc = Rhino.RhinoDoc.ActiveDoc;
+                activeDoc.Objects.UnselectAll();
+
+                List<Guid> objIds = new List<Guid>();
+                if (null != activeDoc)
+                {
+                    int layerIndex = activeDoc.Layers.Find(layerName, true);
+                    if (layerIndex < 0)
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, layerName+" cannot be found.");
+                        return null;
+                    }
+                    Rhino.DocObjects.Layer layer = activeDoc.Layers[layerIndex];
+                    Rhino.DocObjects.RhinoObject[] objs = activeDoc.Objects.FindByLayer(layer);
+                    if (objs != null)
+                    {
+                        foreach (Rhino.DocObjects.RhinoObject obj in objs)
+                        {
+                            if (obj.Geometry.ObjectType == Rhino.DocObjects.ObjectType.Mesh)
+                            {
+                                Mesh mesh = obj.Geometry as Mesh;
+                                if (null != mesh)
+                                {
+                                    anlysisGrid.Add(mesh);
+                                    Guid guid = obj.Id;
+                                    objIds.Add(guid);
+                                }
+                            }
+                        }
+                        activeDoc.Objects.Select(objIds);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Analysis Grid cannot be exported.\n" + ex.Message);
+            }
+            return anlysisGrid;
         }
     }
 }

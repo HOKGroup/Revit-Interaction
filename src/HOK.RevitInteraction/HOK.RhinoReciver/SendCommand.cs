@@ -39,6 +39,9 @@ namespace HOK.RhinoReciver
                             string fileName = Path.GetFileNameWithoutExtension(revitPath);
 
                             DWGExportOptions options = new DWGExportOptions();
+                            options.ExportOfSolids = SolidGeometry.ACIS;
+                            options.TargetUnit = ExportUnit.Foot;
+                            
                             ICollection<ElementId> views = new List<ElementId>();
                             views.Add(activeView.Id);
 
@@ -54,8 +57,6 @@ namespace HOK.RhinoReciver
 
                                     exported = m_doc.Export(directory, fileName, views, options);
                                     trans.Commit();
-
-                                    
                                 }
                                 catch (Exception ex)
                                 {
@@ -78,7 +79,10 @@ namespace HOK.RhinoReciver
                                     dynamic rhino = AppCommand.Instance.RhinoInstance;
                                     if (File.Exists(dwgFileName))
                                     {
-                                        string script = string.Format("-Import \"{0}\" Enter", dwgFileName);
+                                        string script = string.Format("-DocumentProperties Enter U Enter U Enter F Enter Enter Enter Enter"); //document units to fool
+                                        rhino.RunScript(script, false);
+
+                                        script = string.Format("-Import \"{0}\" Enter o Enter F Enter y Enter F Enter", dwgFileName); //model and layout unit to foot
                                         rhino.RunScript(script, false);
 
                                         string rhinoFileName = dwgFileName.Replace(".dwg", ".3dm");

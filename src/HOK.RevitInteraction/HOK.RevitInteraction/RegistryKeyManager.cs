@@ -124,6 +124,7 @@ namespace HOK.RevitInteraction
         private string rhinoDocName = "";
 
         private bool revitOutgoing = false;
+        private int revitOutgoingViewId = -1;
         private string revitOutgoingPath = "";
         private Guid revitOutgoingId = new Guid();
 
@@ -133,6 +134,8 @@ namespace HOK.RevitInteraction
 
         private bool rhinoOutgoing = false;
         private string rhinoOutgoingPath = "";
+        private string divaTempDirectory = "";
+        private string divaResultDirectory = "";
         private Guid rhinoOutgoingId = new Guid();
 
         private bool rhinoIncoming = false;
@@ -146,10 +149,12 @@ namespace HOK.RevitInteraction
         public string RhinoDocNameKey = "RhinoDocName";
 
         public bool RevitOutgoing { get { return revitOutgoing; } set { revitOutgoing = value; } }
+        public int RevitOutgoingViewId { get { return revitOutgoingViewId; } set { revitOutgoingViewId = value; } }
         public string RevitOutgoingPath { get { return revitOutgoingPath; } set { revitOutgoingPath = value; } }
         public Guid RevitOutgoingId { get { return revitOutgoingId; } set { revitOutgoingId = value; } }
         
         public string RevitOutgoingKey="RevitOutgoing";
+        public string RevitOutgoingViewIdKey = "RevitOutgoingViewId";
         public string RevitOutgoingPathKey = "RevitOutgoingPath";
         public string RevitOutgoingIdKey = "RevitOutgoingId";
 
@@ -163,10 +168,14 @@ namespace HOK.RevitInteraction
 
         public bool RhinoOutgoing { get { return rhinoOutgoing; } set { rhinoOutgoing = value; } }
         public string RhinoOutgoingPath { get { return rhinoOutgoingPath; } set { rhinoOutgoingPath = value; } }
+        public string DivaTempDirectory { get { return divaTempDirectory; } set { divaTempDirectory = value; } }
+        public string DivaResultDirectory { get { return divaResultDirectory; } set { divaResultDirectory = value; } }
         public Guid RhinoOutgoingId { get { return rhinoOutgoingId; } set { rhinoOutgoingId = value; } }
 
         public string RhinoOutgoingKey = "RhinoOutgoing";
         public string RhinoOutgoingPathKey = "RhinoOutgoingPath";
+        public string DivaTempKey = "DivaTempDirectory";
+        public string DivaResultKey = "DivaResultDirectory";
         public string RhinoOutgoinIdKey = "RhinoOutgoingId";
 
         public bool RhinoIncoming { get { return rhinoIncoming; } set { rhinoIncoming = value; } }
