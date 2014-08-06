@@ -79,7 +79,7 @@ namespace HOK.RhinoReciver
                                     dynamic rhino = AppCommand.Instance.RhinoInstance;
                                     if (File.Exists(dwgFileName))
                                     {
-                                        string script = string.Format("-DocumentProperties Enter U Enter U Enter F Enter Enter Enter Enter"); //document units to fool
+                                        string script = string.Format("-DocumentProperties Enter U Enter U Enter F Enter Enter Enter Enter"); //document units to foot
                                         rhino.RunScript(script, false);
 
                                         script = string.Format("-Import \"{0}\" Enter o Enter F Enter y Enter F Enter", dwgFileName); //model and layout unit to foot
@@ -94,6 +94,8 @@ namespace HOK.RhinoReciver
                                         script = string.Format("-SaveAs \"{0}\" Enter", rhinoFileName);
                                         rhino.RunScript(script, false);
 
+                                        string weatherFile = @"C:\DIVA\WeatherData\USA_AK_Anchorage.Intl.AP.702730_TMY3.epw";
+                                        script = string.Format("-ProjectInfo \"{0}\" Enter", weatherFile);
 
                                         if (File.Exists(rhinoFileName))
                                         {
